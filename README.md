@@ -58,4 +58,19 @@ git clone https://github.com/sunnysavita10/document_portal.git
 2. Embedding model ## openai, hf, gemini
 
 3. vectordatabase ##inmemory ##ondisk ##cloudbased
+
+
+##GROQ API KEY LINK
+```
+https://console.groq.com/keys
+
+https://console.groq.com/docs/overview
+```
+
+### GEMINI API KEY
+```
+https://aistudio.google.com/apikey
+
+https://ai.google.dev/gemini-api/docs/models
+```
    
