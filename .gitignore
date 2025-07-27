@@ -6,3 +6,4 @@ __pychache__/
 logs/
 *.pyc
 test.py
+data/document_analysis/session_20250727_110617_5e7237d9/NIPS-2017-attention-is-all-you-need-Paper.pdf
