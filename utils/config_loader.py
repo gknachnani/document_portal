@@ -7,4 +7,5 @@ def load_config(config_path: str = "config\config.yaml") -> dict:
     #print(config)
     return config
 
-#load_config("config\config.yaml")
+#cfg=load_config("config\config.yaml")
+#print(cfg)
