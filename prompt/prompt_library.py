@@ -29,5 +29,5 @@ Your response should follow this format:
 {format_instruction}
 """)
 
-PROMPT_REGISTRY={"document_analysis":document_analysis_prompt, "document_comparision": document_comparision_prompt }
+PROMPT_REGISTRY={"document_analysis":document_analysis_prompt, "document_comparision": document_comparison_prompt }
     
