@@ -1,5 +1,6 @@
 import os
 import fitz
+import sys
 import uuid
 from datetime import datetime
 from logger.custom_logger import CustomLogger
@@ -28,7 +29,7 @@ class DocumentHandler:
 
         except Exception as e:
             self.log.error(f"Error initializing DocumentHandler: {e}")
-            raise DocumentPortalException("Error initializing DocumentHandler", e) from e
+            raise DocumentPortalException("Error initializing DocumentHandler", sys) from e
         
 
     def save_pdf(self,uploaded_file):
@@ -36,7 +37,7 @@ class DocumentHandler:
             filename = os.path.basename(uploaded_file.name)
             
             if not filename.lower().endswith(".pdf"):
-                raise DocumentPortalException("Invalid file type. Only PDFs are allowed.")
+                raise DocumentPortalException("Invalid file type. Only PDFs are allowed.", sys)
 
             save_path = os.path.join(self.session_path, filename)
             
@@ -49,7 +50,7 @@ class DocumentHandler:
         
         except Exception as e:
             self.log.error(f"Error saving PDF: {e}")
-            raise DocumentPortalException("Error saving PDF", e) from e
+            raise DocumentPortalException("Error saving PDF", sys) from e
 
     def read_pdf(self, pdf_path:str)->str:
         try:
@@ -63,7 +64,7 @@ class DocumentHandler:
             return text
         except Exception as e:
             self.log.error(f"Error reading PDF: {e}")
-            raise DocumentPortalException("Error reading PDF", e) from e
+            raise DocumentPortalException("Error reading PDF", sys) from e
     
 if __name__ == "__main__":
     from pathlib import Path
