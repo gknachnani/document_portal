@@ -39,7 +39,7 @@ class DocumentIngestion:
             ref_path=self.base_dir / reference_file.name
             act_path=self.base_dir / actual_file.name
             
-            if not reference_file.name.endswith()(".pdf") or not actual_file.name.endswith()(".pdf"):
+            if not reference_file.name.endswith(".pdf") or not actual_file.name.endswith(".pdf"):
                 raise ValueError("Only PDF files are allowed.")
             
             with open(ref_path,"wb") as f:

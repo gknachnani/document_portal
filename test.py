@@ -56,8 +56,8 @@ def load_fake_uploaded_file(file_path: Path):
     return io.BytesIO(file_path.read_bytes())
 
 def test_compare_documents():
-    ref_path = Path("C:\Users\giris\document_portal\data\document_compare\Long_Report_V1.pdf")
-    act_path = Path("C:\Users\giris\document_portal\data\document_compare\Long_Report_V2.pdf")
+    ref_path = Path("C:\\Users\\giris\\document_portal\\data\\document_compare\\Long_Report_V1.pdf")
+    act_path = Path("C:\\Users\\giris\\document_portal\\data\\document_compare\\Long_Report_V2.pdf")
     
     class FakeUpload:
         def __init__(self,file_path:Path):
@@ -82,6 +82,10 @@ def test_compare_documents():
     
     print("\n=== COMPARISION RESULT ===")
     print(comparision_df.head())
+    
+if __name__ == "__main__":
+    test_compare_documents()
+    print("\nTest completed successfully!")
     
         
 

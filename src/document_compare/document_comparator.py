@@ -17,8 +17,8 @@ class DocumentComparatorLLM:
         self.llm =  self.loader.load_llm()
         self.parser = JsonOutputParser(pydantic_object=SummaryResponse)
         self.fixing_parser = OutputFixingParser.from_llm(parser=self.parser, llm=self.llm)
-        self.prompt = PROMPT_REGISTRY['document_comparison']
-        self.chain = self.prompt | self.llm | self.parser | self.fixing_parser
+        self.prompt = PROMPT_REGISTRY['document_comparision']
+        self.chain = self.prompt | self.llm | self.parser
         self.log.info("DocumentComparatorLLM initialized with model and parser.")
         
         
