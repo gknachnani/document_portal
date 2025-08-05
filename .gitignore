@@ -6,5 +6,7 @@ venv/
 __pycache__/
 logs/
 *.pyc
-data/document_analysis/session*/
+# ignore every folder whose name starts with “session” inside data/…
+data/**/session*/
+
 
