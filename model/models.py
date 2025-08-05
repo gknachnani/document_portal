@@ -1,11 +1,12 @@
-from pydantic import BaseModel, Field, RootModel
-from typing import Optional, List, Dict, Any, Union
+from pydantic import BaseModel, RootModel
+from typing import List, Union
+from enum import Enum
 
 
 class MetaData(BaseModel):
-    Summary: List[str] = Field(default_factory=list, description="Summary of the document")
+    Summary: List[str] 
     Title: str
-    Author: str
+    Author: List[str]
     DateCreated: str
     LastModifiedDate: str
     Publisher: str
@@ -20,3 +21,10 @@ class ChangeFormat(BaseModel):
     
 class SummaryResponse(RootModel[list[ChangeFormat]]):
     pass
+
+
+class PromptType(str,Enum):
+    DOCUMENT_ANALYSIS = "document_analysis"
+    DOCUMENT_COMPARISION = "document_comparison"
+    CONTEXTUALIZE_QUESTION = "contextualize_question"
+    CONTEXT_QA = "context_qa"
