@@ -104,13 +104,14 @@ from utils.model_loader import ModelLoader
 
 FAISS_INDEX_PATH = Path("faiss_index")
 
-def test_conversatoins_rag_on_pdf(pdf_path:str, question:str):
+def test_conversations_rag_on_pdf(pdf_path:str, question:str):
     try:
-        model_loader = ModelLoader().load_llm()
+        model_loader = ModelLoader()
         
         if FAISS_INDEX_PATH.exists():
             print("Loading existing FAISS index...") 
             embeddings = model_loader.load_embeddings()
+            print("Loaded existing FAISS index...") 
             vectorstore = FAISS.load_local(folder_path=str(FAISS_INDEX_PATH), embeddings=embeddings, allow_dangerous_deserialization=True)
             retriever = vectorstore.as_retriever(search_type = "similarity", search_kwargs={"k": 5})
         else:
@@ -138,14 +139,15 @@ def test_conversatoins_rag_on_pdf(pdf_path:str, question:str):
 
 if __name__ == "__main__":
     pdf_path = "data\\single_document_chat\\NIPS-2017-attention-is-all-you-need-Paper.pdf"
-    question = "What is the main topic of the document?"
+    #question = "What is the main topic of the document?"
+    question = "What is the significance of the attention mechanism? Can you explain in simple terms? "
     
     if not Path(pdf_path).exists():
         print(f"PDF file not found at {pdf_path}")
         sys.exit(1)
         
     # Run the test
-    test_conversatoins_rag_on_pdf(pdf_path, question)
+    test_conversations_rag_on_pdf(pdf_path, question)
     print("\nTest completed successfully!")
     
         
