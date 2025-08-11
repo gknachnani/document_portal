@@ -2,7 +2,6 @@ from pydantic import BaseModel, RootModel
 from typing import List, Union
 from enum import Enum
 
-
 class MetaData(BaseModel):
     Summary: List[str] 
     Title: str
@@ -14,14 +13,12 @@ class MetaData(BaseModel):
     PageCount: Union[int, str] # Can be "Not Available"
     SentimentTone: str
     
-    
 class ChangeFormat(BaseModel):
     Page:str
     changes: str
     
 class SummaryResponse(RootModel[list[ChangeFormat]]):
     pass
-
 
 class PromptType(str,Enum):
     DOCUMENT_ANALYSIS = "document_analysis"
