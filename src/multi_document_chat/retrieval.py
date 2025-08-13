@@ -14,7 +14,7 @@ from prompt.prompt_library import PROMPT_REGISTRY
 from model.models import PromptType
 
 
-class ConvesationalRAG:
+class ConversationalRAG:
     def __init__(self, session_id:str, retriever=None):
         try:
             self.log = CustomLogger().get_logger(__name__)
