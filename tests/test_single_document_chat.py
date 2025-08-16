@@ -3,11 +3,11 @@
 import sys
 from pathlib import Path
 from langchain_community.vectorstores import FAISS
-from src.single_document_chat.data_ingestion import SingleDocIngestor
-from src.single_document_chat.retrieval import ConversationalRAG
+from archive.src.single_document_chat.data_ingestion import SingleDocIngestor
+from archive.src.single_document_chat.retrieval import ConversationalRAG
 from utils.model_loader import ModelLoader
 
-FAISS_INDEX_PATH = Path("faiss_index")
+FAISS_INDEX_PATH = Path(r"..\faiss_index")
 
 def test_conversations_rag_on_pdf(pdf_path:str, question:str):
     try:
@@ -43,7 +43,7 @@ def test_conversations_rag_on_pdf(pdf_path:str, question:str):
 
 
 if __name__ == "__main__":
-    pdf_path = "data\\single_document_chat\\NIPS-2017-attention-is-all-you-need-Paper.pdf"
+    pdf_path = "..\\data\\single_document_chat\\NIPS-2017-attention-is-all-you-need-Paper.pdf"
     #question = "What is the main topic of the document?"
     question = "What is the significance of the attention mechanism? Can you explain in simple terms? "
     

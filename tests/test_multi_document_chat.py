@@ -1,17 +1,17 @@
 ## testing for multidoc chat
 import sys
 from pathlib import Path
-from src.multi_document_chat.data_ingestion import DocumentIngestor
-from src.multi_document_chat.retrieval import ConversationalRAG
+from archive.src.multi_document_chat.data_ingestion import DocumentIngestor
+from archive.src.multi_document_chat.retrieval import ConversationalRAG
 
 def test_document_ingestion_and_rag():
     print("Inside test_document_ingestion_and_rag ")
     try:
         test_files = [
-            r"data\multi_doc_chat\market_analysis_report.docx",
-            r"data\multi_doc_chat\NIPS-2017-attention-is-all-you-need-Paper.pdf",
-            r"data\multi_doc_chat\sample.pdf",
-            r"data\multi_doc_chat\state_of_the_union.txt"
+            r"..\data\multi_doc_chat\market_analysis_report.docx",
+            r"..\data\multi_doc_chat\NIPS-2017-attention-is-all-you-need-Paper.pdf",
+            r"..\data\multi_doc_chat\sample.pdf",
+            r"..\data\multi_doc_chat\state_of_the_union.txt"
         ]
         uploaded_files =[]
         print("Uploading files")

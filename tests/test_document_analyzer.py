@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 from io import BytesIO
-from src.document_analyzer.data_ingestion import DocumentHandler
-from src.document_analyzer.data_analysis import DocumentAnalyzer
+from archive.src.document_analyzer.data_ingestion import DocumentHandler
+from archive.src.document_analyzer.data_analysis import DocumentAnalyzer
 
     
 pdf_path=r"C:\\Users\\giris\document_portal\\data\\document_analysis\\sample.pdf"
