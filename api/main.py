@@ -106,8 +106,8 @@ async def chat_build_index(
     try:
         wrapped = [FastAPIFileAdapter(f) for f in files]
         ci = ChatIngestor(
-            temp_base = UPLOAD_BASE,
-            faiss_base = FAISS_BASE,
+            temp_base = UPLOAD_BASE, #type: ignore
+            faiss_base = FAISS_BASE, #type: ignore
             use_session_dirs = use_session_dirs,
             session_id = session_id or None,
         )
