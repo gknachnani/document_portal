@@ -24,6 +24,10 @@ from src.document_chat.retrieval import ConversationalRAG
 #     StaticFiles(directory=BASE_DIR / "static"),
 #     name="static"
 # )
+
+FAISS_BASE = os.getenv("FAISS_BASE", "faiss_index")
+UPLOAD_BASE = os.getenv("UPLOAD_BASE", "data")
+
 app = FastAPI(title="Document Portal API", version="0.1")
 
 app.add_middleware(
@@ -57,13 +61,11 @@ class FastAPIFileAdapter:
         return self._uf.file.read()
 
 def _read_pdf_via_handler(handler: DocHandler, path:str) -> str:
-    """
-    Helper function to read PDF using DocHandler.
-    """
-    try:
-        pass
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error reading PDF: {str(e)}")
+    if hasattr(handler, "read_pdf"):
+        return handler.read_pdf(path)
+    if hasattr(handler, "read_"):
+        return handler.read_(path)
+    raise RuntimeError("DocHandler has neither read_pdf nor read_ method")
     
 @app.post("/analyze")
 async def analyze_document(file: UploadFile = File(...)) -> Any:
@@ -106,8 +108,8 @@ async def chat_build_index(
     try:
         wrapped = [FastAPIFileAdapter(f) for f in files]
         ci = ChatIngestor(
-            temp_base = UPLOAD_BASE, #type: ignore
-            faiss_base = FAISS_BASE, #type: ignore
+            temp_base = UPLOAD_BASE, 
+            faiss_base = FAISS_BASE, 
             use_session_dirs = use_session_dirs,
             session_id = session_id or None,
         )
