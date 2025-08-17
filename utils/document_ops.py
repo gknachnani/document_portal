@@ -53,7 +53,7 @@ def concat_for_analysis(docs: List[Document]) -> str:
         parts.append(f"\n--- SOURCE: {src} ---\n{d.page_content}")
     return "\n".join(parts)
 
-def concat_for_comparison(ref_docs: List[Document], act_docs: List[Document]) -> str:
+def concat_for_comparision(ref_docs: List[Document], act_docs: List[Document]) -> str:
     left = concat_for_analysis(ref_docs)
     right = concat_for_analysis(act_docs)
     return f"<<REFERENCE_DOCUMENTS>>\n{left}\n\n<<ACTUAL_DOCUMENTS>>\n{right}"
