@@ -9,5 +9,7 @@ logs/
 # ignore every folder whose name starts with “session” inside data/…
 data/**/session*/
 faiss_index/
+main_archive/
+data/
 
 
