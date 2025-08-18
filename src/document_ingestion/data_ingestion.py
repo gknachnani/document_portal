@@ -107,7 +107,7 @@ class ChatIngestor:
             self.model_loader = ModelLoader()
             
             self.use_session = use_session_dirs
-            self.use_session = session_id or generate_session_id()
+            self.session_id = session_id or generate_session_id()
             
             self.temp_base = Path(temp_base); self.temp_base.mkdir(parents=True, exist_ok=True)
             self.faiss_base = Path(faiss_base); self.faiss_base.mkdir(parents=True, exist_ok=True)
