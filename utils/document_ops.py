@@ -6,7 +6,7 @@ from langchain.schema import Document
 from langchain_community.document_loaders import PyPDFLoader, Docx2txtLoader, TextLoader
 from logger.custom_logger import CustomLogger
 from exception.custom_exception import DocumentPortalException
-from src.document_ingestion.data_ingestion import DocHandler
+#from src.document_ingestion.data_ingestion import DocHandler
 log = CustomLogger().get_logger(__name__)
 SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".txt"}
 
@@ -56,7 +56,7 @@ class FastAPIFileAdapter:
         self._uf.file.seek(0)
         return self._uf.file.read()
 
-def read_pdf_via_handler(handler: DocHandler, path:str) -> str:
+def read_pdf_via_handler(handler: DocHandler, path:str) -> str: #type:ignore
     if hasattr(handler, "read_pdf"):
         return handler.read_pdf(path)
     if hasattr(handler, "read_"):

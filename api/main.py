@@ -50,7 +50,10 @@ def health() -> Dict[str, str]:
 @app.post("/analyze")
 async def analyze_document(file: UploadFile = File(...)) -> Any:
     try:
+        print("main.py: analyze_document() called")
         dh = DocHandler()
+        print("main.py: DocHandler instance created")
+        print("main.py: Calling save_pdf() of DocHandler instance")
         saved_path = dh.save_pdf(FastAPIFileAdapter(file))
         text = read_pdf_via_handler(dh, saved_path)
         analyzer = DocumentAnalyzer()

@@ -182,6 +182,7 @@ class DocHandler:
     PDF save + read (page-wise) for analysis.
     """
     def __init__(self, data_dir: Optional[str] = None, session_id: Optional[str] = None):
+        print("data_ingestion.py: Inside __init__()")
         self.log = CustomLogger().get_logger(__name__)
         self.data_dir = data_dir or os.getenv("DATA_STORAGE_PATH", os.path.join(os.getcwd(), "data", "document_analysis"))
         self.session_id = session_id or generate_session_id("session")
@@ -191,6 +192,7 @@ class DocHandler:
 
     def save_pdf(self, uploaded_file) -> str:
         try:
+            print("data_ingestion.py: Inside save_pdf()")
             filename = os.path.basename(uploaded_file.name)
             if not filename.lower().endswith(".pdf"):
                 raise ValueError("Invalid file type. Only PDFs are allowed.")
