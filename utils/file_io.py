@@ -15,8 +15,10 @@ SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".txt"}
 # Helpers (file I/O + loading)  #
 # ----------------------------- #
 def generate_session_id(prefix: str = "session") -> str:
-    ist = ZoneInfo("Asia/Kolkata")
-    return f"{prefix}_{datetime.now(ist).strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:8]}"
+    #ist = ZoneInfo("Asia/Kolkata")
+    #return f"{prefix}_{datetime.now(ist).strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:8]}"
+    cst = ZoneInfo("America/Chicago")
+    return f"{prefix}_{datetime.now(cst).strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:8]}"    
 
 def save_uploaded_files(uploaded_files: Iterable, target_dir: Path) -> List[Path]:
     """Save uploaded files (Streamlit-like) and return local paths."""
