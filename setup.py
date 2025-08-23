@@ -13,7 +13,6 @@ setup(
     name='document_portal',
     author='Girish Nachnani',
     version='0.1',
-    packages=find_packages(),
     description="An intelligent document analysis and comparison system powered by LLMs",
     long_description=Path("README.md").read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",
