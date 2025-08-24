@@ -69,7 +69,7 @@ Resources:
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties:
-      ClusterName: !Sub document-portal-cluster-${AWS::StackName}   # <-- unique name per stack
+      ClusterName: !Sub document-portal-cluster-${AWS::StackName}
 
   ECSExecutionRole:
     Type: AWS::IAM::Role
@@ -93,11 +93,13 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                   - logs:DescribeLogGroups
-                Resource: "*"                                  # CloudWatch Logs requires "*"
+                Resource: "*"
               - Effect: Allow
-                Action: [secretsmanager:GetSecretValue, ssm:GetParameters]
+                Action:
+                  - secretsmanager:GetSecretValue
+                  - ssm:GetParameters
                 Resource:
-                  - arn:aws:secretsmanager:us-east-1:719742385994:secret:docportal/*
+                  - arn:aws:secretsmanager:us-east-1:719742385994:secret:docportal/prod-*
                   - arn:aws:ssm:us-east-1:719742385994:parameter/docportal/*
 
   ECSSecurityGroup:
@@ -107,6 +109,8 @@ Resources:
       VpcId: !Ref MyVPC
       SecurityGroupIngress:
         - { IpProtocol: tcp, FromPort: 8080, ToPort: 8080, CidrIp: 0.0.0.0/0 }
+      SecurityGroupEgress:
+        - { IpProtocol: -1, CidrIp: 0.0.0.0/0 }
 
   ECSTaskDefinition:
     Type: AWS::ECS::TaskDefinition
@@ -132,8 +136,10 @@ Resources:
             - { Name: ENV, Value: production }
             - { Name: LOG_LEVEL, Value: info }
           Secrets:
-            - { Name: GROQ_API_KEY,   ValueFrom: arn:aws:secretsmanager:us-east-1:719742385994:secret:docportal/groq-api-key-XXXXX }
-            - { Name: GOOGLE_API_KEY, ValueFrom: arn:aws:secretsmanager:us-east-1:719742385994:secret:docportal/google-api-key-YYYYY }
+            - Name: GROQ_API_KEY
+              ValueFrom: arn:aws:secretsmanager:us-east-1:719742385994:secret:docportal/prod-f7GRQE:GROQ_API_KEY::
+            - Name: GOOGLE_API_KEY
+              ValueFrom: arn:aws:secretsmanager:us-east-1:719742385994:secret:docportal/prod-f7GRQE:GOOGLE_API_KEY::
 
   ECSService:
     Type: AWS::ECS::Service
