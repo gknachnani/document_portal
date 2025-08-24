@@ -144,5 +144,9 @@ Resources:
       TaskDefinition: !Ref ECSTaskDefinition
 
 Outputs:
-  ECSClusterName:   { Value: !Ref ECSCluster }
-  TaskDefinitionArn:{ Value: !Ref ECSTaskDefinition }
+  ECSClusterName:
+    Value: !Ref ECSCluster
+
+  TaskDefinitionArn:
+    Value: !Ref ECSTaskDefinition
+
