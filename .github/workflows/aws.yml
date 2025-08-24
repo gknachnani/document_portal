@@ -8,7 +8,6 @@ on:
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: documentportal
-  ECS_CLUSTER: document-portal-cluster
   ECS_SERVICE: document-portal-service
   STACK_NAME: ecr-repo-stack
 
@@ -73,9 +72,15 @@ jobs:
 
       - name: Wait for ECS service to stabilize
         run: |
-          aws ecs wait services-stable \
-            --cluster ${{ env.ECS_CLUSTER }} \
-            --services ${{ env.ECS_SERVICE }}
+          CLUSTER=$(aws cloudformation describe-stacks \
+            --stack-name ${{ env.STACK_NAME }} \
+            --query "Stacks[0].Outputs[?OutputKey=='ECSClusterName'].OutputValue" \
+            --output text)
+          echo "Using cluster: $CLUSTER"
+          aws ecs wait services-stable --cluster "$CLUSTER" --services ${{ env.ECS_SERVICE }}
+          aws ecs describe-services --cluster "$CLUSTER" --services ${{ env.ECS_SERVICE }} \
+            --query 'services[0].events[0:5]'
+
 
       - name: Deployment success message
         run: echo "Deployment successful. App is live on ECS Fargate."
