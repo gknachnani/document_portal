@@ -58,12 +58,18 @@ jobs:
 
       - name: Deploy CloudFormation stack (uses built image)
         run: |
+          set -e
           aws cloudformation deploy \
             --template-file .github/workflows/template.yml \
             --stack-name ${{ env.STACK_NAME }} \
             --region ${{ env.AWS_REGION }} \
             --capabilities CAPABILITY_NAMED_IAM \
-            --parameter-overrides ImageUrl=${{ steps.build-image.outputs.image }}
+            --parameter-overrides ImageUrl=${{ steps.build-image.outputs.image }} \
+            --no-fail-on-empty-changeset || (
+              aws cloudformation describe-stack-events --stack-name ${{ env.STACK_NAME }} --max-items 25
+              exit 1
+            )
+
 
       - name: Wait for ECS service to stabilize
         run: |
