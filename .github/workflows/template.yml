@@ -71,6 +71,13 @@ Resources:
     Properties:
       ClusterName: !Sub document-portal-cluster-${AWS::StackName}
 
+  # NEW: pre-create CloudWatch Logs group used by awslogs
+  AppLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /ecs/documentportal
+      RetentionInDays: 14
+
   ECSExecutionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -143,7 +150,9 @@ Resources:
 
   ECSService:
     Type: AWS::ECS::Service
-    DependsOn: AttachGateway
+    DependsOn:
+      - AttachGateway
+      - AppLogGroup                # ensure log group exists before tasks start
     Properties:
       ServiceName: document-portal-service
       Cluster: !Ref ECSCluster
