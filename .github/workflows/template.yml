@@ -69,7 +69,7 @@ Resources:
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties:
-      ClusterName: document-portal-cluster
+      ClusterName: !Sub document-portal-cluster-${AWS::StackName}   # <-- unique name per stack
 
   ECSExecutionRole:
     Type: AWS::IAM::Role
@@ -83,10 +83,17 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
       Policies:
-        - PolicyName: DocPortalSecretsAccess
+        - PolicyName: DocPortalLogsAndSecrets
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - logs:DescribeLogGroups
+                Resource: "*"                                  # CloudWatch Logs requires "*"
               - Effect: Allow
                 Action: [secretsmanager:GetSecretValue, ssm:GetParameters]
                 Resource:
@@ -118,7 +125,7 @@ Resources:
           LogConfiguration:
             LogDriver: awslogs
             Options:
-              awslogs-group: /ecs/documentportal     # let ECS create if missing
+              awslogs-group: /ecs/documentportal
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: ecs
           Environment:
@@ -146,7 +153,5 @@ Resources:
 Outputs:
   ECSClusterName:
     Value: !Ref ECSCluster
-
   TaskDefinitionArn:
     Value: !Ref ECSTaskDefinition
-
