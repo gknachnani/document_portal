@@ -137,9 +137,9 @@ Resources:
             - { Name: LOG_LEVEL, Value: info }
           Secrets:
             - Name: GROQ_API_KEY
-              ValueFrom: arn:aws:secretsmanager:us-east-1:719742385994:secret:docportal/prod-f7GRQE:GROQ_API_KEY::
+              ValueFrom: 'arn:aws:secretsmanager:us-east-1:719742385994:secret:docportal/prod-f7GRQE:GROQ_API_KEY::'
             - Name: GOOGLE_API_KEY
-              ValueFrom: arn:aws:secretsmanager:us-east-1:719742385994:secret:docportal/prod-f7GRQE:GOOGLE_API_KEY::
+              ValueFrom: 'arn:aws:secretsmanager:us-east-1:719742385994:secret:docportal/prod-f7GRQE:GOOGLE_API_KEY::'
 
   ECSService:
     Type: AWS::ECS::Service
