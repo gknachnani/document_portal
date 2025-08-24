@@ -2,17 +2,15 @@ name: Deploy to Amazon ECS
 
 on:
   push:
-    branches:
-      - "main"
-  workflow_dispatch:      
+    branches: ["main"]
+  workflow_dispatch:
 
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: documentportal
-  ECS_SERVICE: document-portal-service
   ECS_CLUSTER: document-portal-cluster
-  ECS_TASK_DEFINITION: .github/workflows/task-definition.json
-  CONTAINER_NAME: document-portal-container
+  ECS_SERVICE: document-portal-service
+  STACK_NAME: ecr-repo-stack
 
 permissions:
   id-token: write
@@ -25,53 +23,44 @@ jobs:
     environment: production
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Configure AWS credentials (assume role via OIDC)
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        role-to-assume: arn:aws:iam::719742385994:role/GitHubActionsDeployer        
-        aws-region: ${{ env.AWS_REGION }}
+      - name: Configure AWS credentials (assume role via OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::719742385994:role/GitHubActionsDeployer
+          aws-region: ${{ env.AWS_REGION }}
 
-    - name: Deploy ECR stack (optional)
-      run: |
-        aws cloudformation deploy \
-          --template-file .github/workflows/template.yml \
-          --stack-name ecr-repo-stack \
-          --region ${{ env.AWS_REGION }} \
-          --capabilities CAPABILITY_NAMED_IAM
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          IMAGE_URI=$ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG
+          docker build -t $IMAGE_URI .
+          docker push $IMAGE_URI
+          echo "image=$IMAGE_URI" >> $GITHUB_OUTPUT
 
-    - name: Build, tag, and push image to Amazon ECR
-      id: build-image
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ github.sha }}
-      run: |
-        IMAGE_URI=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        docker build -t $IMAGE_URI .
-        docker push $IMAGE_URI
-        echo "image=$IMAGE_URI" >> $GITHUB_OUTPUT
+      - name: Deploy CloudFormation stack (uses built image)
+        run: |
+          aws cloudformation deploy \
+            --template-file .github/workflows/template.yml \
+            --stack-name ${{ env.STACK_NAME }} \
+            --region ${{ env.AWS_REGION }} \
+            --capabilities CAPABILITY_NAMED_IAM \
+            --parameter-overrides ImageUrl=${{ steps.build-image.outputs.image }}
 
-    - name: Fill in the new image ID in the Amazon ECS task definition
-      id: task-def
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: ${{ env.ECS_TASK_DEFINITION }}
-        container-name: ${{ env.CONTAINER_NAME }}
-        image: ${{ steps.build-image.outputs.image }}
+      - name: Wait for ECS service to stabilize
+        run: |
+          aws ecs wait services-stable \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --services ${{ env.ECS_SERVICE }}
 
-    - name: Deploy Amazon ECS task definition
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: ${{ env.ECS_SERVICE }}
-        cluster: ${{ env.ECS_CLUSTER }}
-        wait-for-service-stability: true
-
-    - name: Deployment success message
-      run: echo "Deployment successful! App is live on ECS Fargate."
+      - name: Deployment success message
+        run: echo "Deployment successful. App is live on ECS Fargate."
