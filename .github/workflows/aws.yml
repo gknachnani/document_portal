@@ -47,6 +47,15 @@ jobs:
           docker push $IMAGE_URI
           echo "image=$IMAGE_URI" >> $GITHUB_OUTPUT
 
+      - name: Show template.yml
+        run: |
+          echo "PATH: .github/workflows/template.yml"
+          ls -la .github/workflows/
+          echo "----- BEGIN -----"
+          sed -n '1,200p' .github/workflows/template.yml
+          echo "------ END ------"
+
+
       - name: Deploy CloudFormation stack (uses built image)
         run: |
           aws cloudformation deploy \
