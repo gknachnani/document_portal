@@ -46,12 +46,12 @@ jobs:
           docker push $IMAGE_URI
           echo "image=$IMAGE_URI" >> $GITHUB_OUTPUT
 
-      - name: Show template.yml
+      - name: Show template1.yml
         run: |
-          echo "PATH: .github/workflows/template.yml"
+          echo "PATH: .github/workflows/template1.yml"
           ls -la .github/workflows/
           echo "----- BEGIN -----"
-          sed -n '1,200p' .github/workflows/template.yml
+          sed -n '1,200p' .github/workflows/template1.yml
           echo "------ END ------"
 
 
@@ -59,7 +59,7 @@ jobs:
         run: |
           set -e
           aws cloudformation deploy \
-            --template-file .github/workflows/template.yml \
+            --template-file .github/workflows/template1.yml \
             --stack-name ${{ env.STACK_NAME }} \
             --region ${{ env.AWS_REGION }} \
             --capabilities CAPABILITY_NAMED_IAM \
