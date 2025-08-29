@@ -5,7 +5,7 @@ on:
 #    branches: [master]
 #  pull_request:
 #    branches: [master]
-  workflow_dispatch:
+  # workflow_dispatch:
   workflow_run:
     workflows: ["Run Unit Tests"]   # Match the name in your ci.yaml
     types:
