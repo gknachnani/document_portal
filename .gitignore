@@ -11,4 +11,5 @@ data/**/session*/
 faiss_index/
 main_archive/
 data/
+archive/
 
