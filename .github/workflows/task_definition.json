@@ -43,10 +43,7 @@
         "options": {
           "awslogs-group": "/ecs/documentportal_liveclass",
           "awslogs-region": "us-east-1",
-          "awslogs-stream-prefix": "ecs",
-          "awslogs-create-group": "true",
-          "mode": "non-blocking",
-          "max-buffer-size": "25m"
+          "awslogs-stream-prefix": "ecs"
         }
       }
     }
