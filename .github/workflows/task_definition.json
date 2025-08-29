@@ -43,7 +43,8 @@
         "options": {
           "awslogs-group": "/ecs/documentportal_liveclass",
           "awslogs-region": "us-east-1",
-          "awslogs-stream-prefix": "ecs"
+          "awslogs-stream-prefix": "ecs",
+          "awslogs-create-group": "true"          
         }
       }
     }
