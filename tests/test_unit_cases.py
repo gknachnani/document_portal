@@ -9,4 +9,4 @@ client = TestClient(app)
 def test_home():
     response = client.get("/")
     assert response.status_code == 200
-    assert "NexaDocs" in response.text
+    assert "DocNexus" in response.text
