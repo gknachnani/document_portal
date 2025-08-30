@@ -113,12 +113,12 @@ class ModelLoader:
 
 
         elif provider == "groq":
-            llm=ChatGroq(
+            return ChatGroq(
                 model=model_name,
-                api_key=self.api_keys["GROQ_API_KEY"], #type: ignore
+                api_key=self.api_key_mgr.get["GROQ_API_KEY"], #type: ignore
                 temperature=temperature,
             )
-            return llm
+
             
         # elif provider == "openai":
         #     return ChatOpenAI(

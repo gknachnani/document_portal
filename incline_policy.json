@@ -1,0 +1,33 @@
+{
+    "name of first policy":"CloudWatchLogs",
+    "value of the first policy":{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"logs:CreateLogGroup",
+				"logs:CreateLogStream",
+				"logs:PutLogEvents"
+			],
+			"Resource": "arn:aws:logs:us-east-1:719742385994:*"
+		}
+	]
+},
+    "name of the second policy":"SecretsManager",
+    "value of the second policy":{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "ReadDocportalSecrets",
+			"Effect": "Allow",
+			"Action": [
+				"secretsmanager:GetSecretValue",
+				"secretsmanager:DescribeSecret"
+			],
+			"Resource": "arn:aws:secretsmanager:us-east-1:719742385994:secret:docportal/prod*"
+		}
+	]
+}
+
+}
