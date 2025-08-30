@@ -1,9 +1,10 @@
 /* ====== THEME ====== */
 :root{
   --bg:#0b0f16;
-  --bg-grad: radial-gradient(1200px 600px at 10% -20%, rgba(91,115,255,.15), transparent 40%),
-             radial-gradient(900px 500px at 90% -30%, rgba(61,215,182,.12), transparent 40%),
-             linear-gradient(180deg, #0b0f16 0%, #0a0d12 100%);
+  --bg-grad:
+    radial-gradient(1200px 600px at 10% -20%, rgba(91,115,255,.15), transparent 40%),
+    radial-gradient(900px 500px at 90% -30%, rgba(61,215,182,.12), transparent 40%),
+    linear-gradient(180deg, #0b0f16 0%, #0a0d12 100%);
   --surface:#0f1622;
   --glass: rgba(20,28,40,.7);
   --text:#e8ecf3;
@@ -28,6 +29,10 @@ body{
   -moz-osx-font-smoothing:grayscale;
 }
 
+/* Focus visibility */
+:focus{outline:none}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:8px}
+
 /* ====== HEADER ====== */
 .app-header{
   position:sticky; top:0; z-index:20;
@@ -39,10 +44,10 @@ body{
 }
 .brand{display:flex; align-items:center; gap:12px}
 .brand .logo{font-size:24px}
-.brand h1{margin:0; font-size:18px; font-weight:600; letter-spacing:.2px}
+.brand-title{margin:0; font-size:18px; font-weight:600; letter-spacing:.2px}
 
 /* Tabs */
-.mode-switch{display:flex; gap:8px; flex-wrap:wrap; position:relative}
+.mode-switch{display:flex; gap:8px; flex-wrap:wrap}
 .tab-btn{
   position:relative;
   border:1px solid var(--border);
@@ -119,11 +124,10 @@ input[type="file"]{
   border-radius:14px;
   padding:12px;
   cursor:pointer;
-  transition:border-color .2s ease, background .2s ease;
+  transition:border-color .2s ease, background .2s ease, box-shadow .2s ease;
 }
 input[type="file"]:hover{border-color:#38455e; background:#0c131d}
-
-.help{color:var(--muted); font-size:12px}
+input[type="file"]:focus-visible{box-shadow:0 0 0 3px rgba(61,215,182,.22)}
 
 /* Buttons */
 .btn{
@@ -134,16 +138,25 @@ input[type="file"]:hover{border-color:#38455e; background:#0c131d}
   padding:11px 14px;
   border-radius:14px;
   cursor:pointer; user-select:none;
-  transition:transform .12s ease, border-color .2s ease, box-shadow .2s ease, filter .2s;
+  transition:transform .12s ease, border-color .2s ease, box-shadow .2s ease, filter .2s, opacity .2s;
 }
 .btn:hover{transform:translateY(-1px); border-color:#2a3445}
 .btn:active{transform:translateY(0)}
+.btn[disabled]{opacity:.6; cursor:not-allowed}
 .btn.primary{
   background:linear-gradient(135deg, var(--accent) 0%, #4ea2ff 100%);
   border:0; color:#0b1020; font-weight:600;
   box-shadow:0 6px 22px rgba(78,162,255,.25);
 }
 .btn.primary:hover{filter:brightness(1.05)}
+/* Busy spinner on buttons */
+.btn[aria-busy="true"]{position:relative; pointer-events:none}
+.btn[aria-busy="true"]::after{
+  content:""; position:absolute; right:12px; width:16px; height:16px; top:50%; transform:translateY(-50%);
+  border:2px solid rgba(255,255,255,.35); border-top-color:#fff; border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:translateY(-50%) rotate(360deg)}}
 
 /* ====== RESULTS ====== */
 .result-block{margin-top:18px}

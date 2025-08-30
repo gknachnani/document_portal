@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <title>NexaDocs | AI Document Intelligence</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Analyze, compare, and chat across documents using retrieval-augmented generation." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,21 +14,29 @@
   <header class="app-header">
     <div class="brand">
       <span class="logo" aria-hidden="true">▦</span>
-      <h1>NexaDocs</h1>
+      <h1 class="brand-title">NexaDocs</h1>
     </div>
-    <nav class="mode-switch">
-      <button class="tab-btn active" data-tab="analysis">Analyze Document</button>
-      <button class="tab-btn" data-tab="compare">Compare Documents</button>
-      <button class="tab-btn" data-tab="chat">Knowledge Chat</button>
+
+    <nav class="mode-switch" role="tablist" aria-label="Modes">
+      <button type="button" id="tabbtn-analysis" class="tab-btn active"
+              role="tab" aria-selected="true" aria-controls="tab-analysis"
+              data-tab="analysis">Analyze Document</button>
+      <button type="button" id="tabbtn-compare" class="tab-btn"
+              role="tab" aria-selected="false" aria-controls="tab-compare"
+              data-tab="compare">Compare Documents</button>
+      <button type="button" id="tabbtn-chat" class="tab-btn"
+              role="tab" aria-selected="false" aria-controls="tab-chat"
+              data-tab="chat">Knowledge Chat</button>
     </nav>
   </header>
 
   <main class="container">
     <!-- ============== ANALYSIS ============== -->
-    <section id="tab-analysis" class="tab-panel active">
+    <section id="tab-analysis" class="tab-panel active" role="tabpanel" aria-labelledby="tabbtn-analysis">
       <div class="card">
         <h2>Analyze Document</h2>
         <p class="muted">Upload a PDF to generate a structured summary and key metadata.</p>
+
         <form id="form-analyze" class="form-grid" onsubmit="return false;">
           <div class="field">
             <label for="an-file">Select PDF</label>
@@ -35,21 +44,23 @@
             <small class="help">Supported format: PDF</small>
           </div>
           <div class="actions">
-            <button id="btn-analyze" class="btn primary">Start Analysis</button>
+            <button id="btn-analyze" class="btn primary" type="button">Start Analysis</button>
           </div>
         </form>
+
         <div id="an-result" class="result-block">
           <h3>Analysis Output</h3>
-          <pre class="code" id="an-json">Awaiting analysis</pre>
+          <pre class="code" id="an-json" role="status" aria-live="polite">Awaiting analysis</pre>
         </div>
       </div>
     </section>
 
     <!-- ============== COMPARE ============== -->
-    <section id="tab-compare" class="tab-panel">
+    <section id="tab-compare" class="tab-panel" role="tabpanel" aria-labelledby="tabbtn-compare" hidden>
       <div class="card">
         <h2>Compare Documents</h2>
         <p class="muted">Upload a reference PDF and a candidate PDF to view page-level differences.</p>
+
         <form id="form-compare" class="form-grid-2" onsubmit="return false;">
           <div class="field">
             <label for="cmp-ref">Reference PDF</label>
@@ -60,16 +71,16 @@
             <input id="cmp-act" type="file" accept=".pdf" required />
           </div>
           <div class="actions span-2">
-            <button id="btn-compare" class="btn primary">Run Comparison</button>
+            <button id="btn-compare" class="btn primary" type="button">Run Comparison</button>
           </div>
         </form>
 
         <div id="cmp-result" class="result-block">
           <h3>Comparison Results</h3>
-          <div class="table-wrap">
+          <div class="table-wrap" role="region" aria-live="polite" aria-label="Comparison table">
             <table id="cmp-table">
               <thead>
-                <tr><th>Page</th><th>Changes</th></tr>
+                <tr><th style="width:96px">Page</th><th>Changes</th></tr>
               </thead>
               <tbody>
                 <tr><td colspan="2" class="muted center">No results</td></tr>
@@ -81,7 +92,7 @@
     </section>
 
     <!-- ============== CHAT ============== -->
-    <section id="tab-chat" class="tab-panel">
+    <section id="tab-chat" class="tab-panel" role="tabpanel" aria-labelledby="tabbtn-chat" hidden>
       <div class="card">
         <h2>Knowledge Chat</h2>
         <p class="muted">Upload files to index and chat across them using retrieval-augmented generation.</p>
@@ -114,7 +125,7 @@
               <input id="chat-k" type="number" value="5" min="1" max="20" />
             </div>
             <div class="field toggle-row">
-              <label>Use session-scoped index</label>
+              <label for="chat-sessionized">Use session-scoped index</label>
               <label class="switch">
                 <input id="chat-sessionized" type="checkbox" checked />
                 <span class="slider"></span>
@@ -123,7 +134,7 @@
           </div>
 
           <div class="actions">
-            <button id="btn-build" class="btn primary">Build Index</button>
+            <button id="btn-build" class="btn primary" type="button">Build Index</button>
           </div>
         </form>
 
@@ -135,15 +146,15 @@
             <input id="chat-q" type="text" placeholder="Ask about your documents" />
           </div>
           <div class="actions">
-            <button id="btn-ask" class="btn">Ask</button>
+            <button id="btn-ask" class="btn" type="button">Ask</button>
           </div>
         </form>
 
-        <div id="chat-meta" class="muted small"></div>
+        <div id="chat-meta" class="muted small" role="status" aria-live="polite"></div>
 
         <div id="chat-ans" class="result-block">
           <h3>Answer</h3>
-          <div class="answer" id="chat-answer">No answer</div>
+          <div class="answer" id="chat-answer" role="status" aria-live="polite">No answer</div>
         </div>
       </div>
     </section>
@@ -155,26 +166,58 @@
   </footer>
 
   <script>
-  const API_BASE = "";
+  // Configurable base (override via window.__API_BASE__ before this script if needed)
+  const API_BASE = (window.__API_BASE__ ?? "").replace(/\/+$/,"");
 
-  const tabs = document.querySelectorAll(".tab-btn");
-  const panels = document.querySelectorAll(".tab-panel");
-  tabs.forEach(btn => {
-    btn.addEventListener("click", () => {
-      tabs.forEach(b => b.classList.remove("active"));
-      panels.forEach(p => p.classList.remove("active"));
-      btn.classList.add("active");
-      document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+  // Tabs: delegated, ARIA-correct, and hidden toggling
+  (function initTabs(){
+    const nav = document.querySelector(".mode-switch");
+    const panels = document.querySelectorAll(".tab-panel");
+    function activate(tab){
+      document.querySelectorAll(".tab-btn").forEach(b=>{
+        const on = b.dataset.tab === tab;
+        b.classList.toggle("active", on);
+        b.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      panels.forEach(p=>{
+        const on = p.id === `tab-${tab}`;
+        p.classList.toggle("active", on);
+        p.hidden = !on;
+      });
+    }
+    nav.addEventListener("click", (e)=>{
+      const btn = e.target.closest(".tab-btn");
+      if(!btn) return;
+      activate(btn.dataset.tab);
     });
-  });
+    // initial
+    activate(document.querySelector(".tab-btn.active")?.dataset.tab || "analysis");
+  })();
+
+  // Small helper to show busy state on buttons
+  function setBusy(btn, busy, busyLabel){
+    if(!btn) return;
+    if(busy){
+      btn.dataset._label = btn.textContent;
+      if(busyLabel) btn.textContent = busyLabel;
+      btn.setAttribute("aria-busy","true");
+      btn.disabled = true;
+    }else{
+      btn.textContent = btn.dataset._label || btn.textContent;
+      btn.removeAttribute("aria-busy");
+      btn.disabled = false;
+    }
+  }
 
   // ===== ANALYZE =====
-  document.getElementById("btn-analyze").addEventListener("click", async () => {
+  document.getElementById("btn-analyze").addEventListener("click", async (ev) => {
+    const btn = ev.currentTarget;
     const file = document.getElementById("an-file").files[0];
     const out  = document.getElementById("an-json");
     if (!file) { out.textContent = "Select a PDF to continue"; return; }
 
     try {
+      setBusy(btn, true, "Analyzing…");
       out.textContent = "Processing";
       const fd = new FormData();
       fd.append("file", file);
@@ -188,11 +231,14 @@
       out.textContent = JSON.stringify(json, null, 2);
     } catch (e) {
       out.textContent = "Error: " + (e.message || e);
+    } finally {
+      setBusy(btn, false);
     }
   });
 
   // ===== COMPARE =====
-  document.getElementById("btn-compare").addEventListener("click", async () => {
+  document.getElementById("btn-compare").addEventListener("click", async (ev) => {
+    const btn   = ev.currentTarget;
     const ref   = document.getElementById("cmp-ref").files[0];
     const act   = document.getElementById("cmp-act").files[0];
     const tbody = document.querySelector("#cmp-table tbody");
@@ -203,6 +249,7 @@
     }
 
     try {
+      setBusy(btn, true, "Comparing…");
       tbody.innerHTML = `<tr><td colspan="2" class="center">Processing</td></tr>`;
 
       const fd = new FormData();
@@ -227,13 +274,16 @@
       }).join("");
     } catch (e) {
       tbody.innerHTML = `<tr><td colspan="2" class="muted center">Error: ${e.message || e}</td></tr>`;
+    } finally {
+      setBusy(btn, false);
     }
   });
 
   // ===== CHAT (index + ask) =====
   let currentSession = null;
 
-  document.getElementById("btn-build").addEventListener("click", async () => {
+  document.getElementById("btn-build").addEventListener("click", async (ev) => {
+    const btn       = ev.currentTarget;
     const files     = document.getElementById("chat-files").files;
     const sessionId = document.getElementById("chat-session").value.trim();
     const useSess   = document.getElementById("chat-sessionized").checked;
@@ -245,6 +295,7 @@
     if (!files.length) { meta.textContent = "Upload at least one file"; return; }
 
     try {
+      setBusy(btn, true, "Indexing…");
       meta.textContent = "Building index";
 
       const fd = new FormData();
@@ -263,16 +314,21 @@
       const json = await res.json();
       currentSession = json.session_id || sessionId || null;
       meta.textContent = `Index ready. session=${currentSession || "none"}, k=${json.k}`;
+      // Persist session locally for convenience
+      try { localStorage.setItem("nexadocs:lastSession", currentSession || ""); } catch {}
     } catch (e) {
       meta.textContent = "Indexing failed: " + (e.message || e);
+    } finally {
+      setBusy(btn, false);
     }
   });
 
-  document.getElementById("btn-ask").addEventListener("click", async () => {
-    const q        = document.getElementById("chat-q").value.trim();
-    const ans      = document.getElementById("chat-answer");
-    const useSess  = document.getElementById("chat-sessionized").checked;
-    const k        = +document.getElementById("chat-k").value || 5;
+  document.getElementById("btn-ask").addEventListener("click", async (ev) => {
+    const btn     = ev.currentTarget;
+    const q       = document.getElementById("chat-q").value.trim();
+    const ans     = document.getElementById("chat-answer");
+    const useSess = document.getElementById("chat-sessionized").checked;
+    const k       = +document.getElementById("chat-k").value || 5;
 
     if (!q) { ans.textContent = "Enter a question"; return; }
     if (useSess && !currentSession) {
@@ -281,6 +337,7 @@
     }
 
     try {
+      setBusy(btn, true, "Sending…");
       ans.textContent = "Processing";
 
       const fd = new FormData();
@@ -298,9 +355,19 @@
       ans.textContent = json.answer || "No answer";
     } catch (e) {
       ans.textContent = "Query failed: " + (e.message || e);
+    } finally {
+      setBusy(btn, false);
     }
   });
-  </script>
 
+  // Restore last session if present
+  try {
+    const last = localStorage.getItem("nexadocs:lastSession");
+    if (last) {
+      document.getElementById("chat-session").value = last;
+      currentSession = last;
+    }
+  } catch {}
+  </script>
 </body>
 </html>
