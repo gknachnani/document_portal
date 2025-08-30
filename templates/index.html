@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>NexaDocs | AI Document Intelligence</title>
+  <title>DocNexus | AI Document Intelligence</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Analyze, compare, and chat across documents using retrieval-augmented generation." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +14,7 @@
   <header class="app-header">
     <div class="brand">
       <span class="logo" aria-hidden="true">▦</span>
-      <h1 class="brand-title">NexaDocs</h1>
+      <h1 class="brand-title">DocNexus</h1>
     </div>
 
     <nav class="mode-switch" role="tablist" aria-label="Modes">
@@ -161,7 +161,7 @@
   </main>
 
   <footer class="app-footer">
-    <div>© 2025 NexaDocs · Built by Girish Nachnani</div>
+    <div>© 2025 DocNexus · Built by Girish Nachnani</div>
     <div class="tiny">Powered by LangChain · FastAPI · AWS ECS</div>
   </footer>
 
@@ -315,7 +315,7 @@
       currentSession = json.session_id || sessionId || null;
       meta.textContent = `Index ready. session=${currentSession || "none"}, k=${json.k}`;
       // Persist session locally for convenience
-      try { localStorage.setItem("nexadocs:lastSession", currentSession || ""); } catch {}
+      try { localStorage.setItem("docnexus:lastSession", currentSession || ""); } catch {}
     } catch (e) {
       meta.textContent = "Indexing failed: " + (e.message || e);
     } finally {
@@ -362,7 +362,7 @@
 
   // Restore last session if present
   try {
-    const last = localStorage.getItem("nexadocs:lastSession");
+    const last = localStorage.getItem("docnexus:lastSession");
     if (last) {
       document.getElementById("chat-session").value = last;
       currentSession = last;
