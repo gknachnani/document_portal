@@ -45,3 +45,4 @@ logs/
 dist/
 build/
 document_portal.egg-info/
+instruction_for_deployment.txt
