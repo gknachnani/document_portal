@@ -25,6 +25,7 @@ faiss_index/
 # Notebooks & experiments
 *.ipynb
 .ipynb_checkpoints/
+notebook/*.ipynb
 
 # Data & archive
 data/
